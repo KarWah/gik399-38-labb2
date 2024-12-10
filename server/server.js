@@ -17,6 +17,23 @@ server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+
+
+const sqlite3 = require("sqlite3").verbose(); // Import SQLite3
+const db = new sqlite3.Database("./gik339-labb2.db"); 
+
+
 server.get("/users", (req, res) => {
-  res.send("This is the /users endpoint!");
+  const query = "SELECT * FROM users"; // SQL query to fetch all rows from the 'users' table
+
+  db.all(query, (err, rows) => {
+    if (err) {
+      // Handle database error
+      console.error(err.message);
+      res.status(500).send("Database error");
+    } else {
+      // Send the rows as JSON response
+      res.json(rows);
+    }
+  });
 });
